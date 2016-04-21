@@ -1,0 +1,3 @@
+name: logic
+depend: stdlib-prelude
+include: .
