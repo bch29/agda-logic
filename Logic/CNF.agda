@@ -73,6 +73,19 @@ module _ {n} where
     (¬ A ∧ ¬ B)                        ≃⟨ ∧-cong (nnf-correct (¬ A)) (nnf-correct (¬ B)) ⟩
     (nnfProp (¬ A) ∧ nnfProp (¬ B))    ∎
 
+  -- nnf-idempotent : ∀ A → nnfProp (nnfProp A) ≡ nnfProp A
+  -- nnf-idempotent (# v) = ≡refl
+  -- nnf-idempotent (A ∧ B) = {!!}
+  -- nnf-idempotent (A ∨ B) = {!!}
+  -- nnf-idempotent (¬ # v) = ≡refl
+  -- nnf-idempotent (¬ (A ∧ B)) = {!!}
+  -- nnf-idempotent (¬ (A ∨ B)) = {!!}
+  -- nnf-idempotent (¬ (¬ A)) = {!!}
+  -- nnf-idempotent (¬ tt) = ≡refl
+  -- nnf-idempotent (¬ ff) = ≡refl
+  -- nnf-idempotent tt = ≡refl
+  -- nnf-idempotent ff = ≡refl
+
 --------------------------------------------------------------------------------
 --  Since semantic execution of a CNF under our particular semiring creates a
 --  few superfluous 'tt' and 'ff's on the left of conjunctions and disjunctions
