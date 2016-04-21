@@ -35,3 +35,22 @@ record Foldable ℓ c p : Set (lsuc (ℓ ⊔ c ⊔ p)) where
     ops : (monoid : Monoid c p) → FoldableOps T _►_ empty monoid
 
   open module Ops monoid = FoldableOps (ops monoid) public
+
+module ListFoldable where
+  module Ops {c p} (monoid : Monoid c p) where
+    open Monoid monoid renaming (Carrier to M)
+
+    ops : FoldableOps {lzero}{c}{p} List _∷_ [] monoid
+    ops = record
+      { foldMap = λ f → foldr _∙_ ε ∘ map f
+      ; ►-∙ = λ _ _ _ → refl
+      ; empty-ε = λ _ → refl
+      }
+
+  foldable : ∀ {c p} → Foldable lzero c p
+  foldable = record
+    { T = List
+    ; empty = []
+    ; _►_ = _∷_
+    ; ops = Ops.ops
+    }
