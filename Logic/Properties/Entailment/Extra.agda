@@ -61,21 +61,21 @@ open ⊨-Reasoning
 ∨-intro₂ : ∀ A B → B ⊨ A ∨ B
 ∨-intro₂ A B = begin
   B        ⊨⟨ ∨-intro₁ _ _ ⟩
-  (B ∨ A)  ⊨⟨ ∨-comm _ _ ⟩
-  (A ∨ B)  ∎
+  B ∨ A    ⊨⟨ ∨-comm _ _ ⟩
+  A ∨ B    ∎
 
 ∧-cong : ∀ {A A′ B B′} → A ⊨ A′ → B ⊨ B′ → A ∧ B ⊨ A′ ∧ B′
 ∧-cong {A}{A′}{B}{B′} aa bb = begin
-  (A  ∧ B)     ⊨⟨ ∧-cong₁ aa ⟩
-  (A′ ∧ B)     ⊨⟨ ∧-comm _ _ ⟩
-  (B  ∧ A′)    ⊨⟨ ∧-cong₁ bb ⟩
-  (B′ ∧ A′)    ⊨⟨ ∧-comm _ _ ⟩
-  (A′ ∧ B′)    ∎
+  A  ∧ B     ⊨⟨ ∧-cong₁ aa ⟩
+  A′ ∧ B     ⊨⟨ ∧-comm _ _ ⟩
+  B  ∧ A′    ⊨⟨ ∧-cong₁ bb ⟩
+  B′ ∧ A′    ⊨⟨ ∧-comm _ _ ⟩
+  A′ ∧ B′    ∎
 
 ∨-cong : ∀ {A A′ B B′} → A ⊨ A′ → B ⊨ B′ → A ∨ B ⊨ A′ ∨ B′
 ∨-cong {A}{A′}{B}{B′} aa bb = begin
-  (A  ∨ B)     ⊨⟨ ∨-cong₁ aa ⟩
-  (A′ ∨ B)     ⊨⟨ ∨-comm _ _ ⟩
-  (B  ∨ A′)    ⊨⟨ ∨-cong₁ bb ⟩
-  (B′ ∨ A′)    ⊨⟨ ∨-comm _ _ ⟩
-  (A′ ∨ B′)    ∎
+  A  ∨ B     ⊨⟨ ∨-cong₁ aa ⟩
+  A′ ∨ B     ⊨⟨ ∨-comm _ _ ⟩
+  B  ∨ A′    ⊨⟨ ∨-cong₁ bb ⟩
+  B′ ∨ A′    ⊨⟨ ∨-comm _ _ ⟩
+  A′ ∨ B′    ∎

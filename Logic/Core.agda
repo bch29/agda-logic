@@ -4,10 +4,10 @@ open import Prelude renaming (¬_ to ~_)
 import Data.Vec.N-ary as N-ary
 open N-ary
 
-infixr 3 _∧_
-infixr 2 _∨_
-infixl 4 ¬_
-infix 5 #_
+infixl 4 _∨_
+infixl 5 _∧_
+infixl 6 ¬_
+infix 7 #_
 
 -- propositions are indexed by the number of free variables
 
@@ -20,8 +20,8 @@ data Prop (n : ℕ) : Set where
   ff : Prop n
 
 module _ {n} where
-  infixr 1 _⇒_
-  infix 1 _⇔_
+  infixr 3 _⇒_
+  infix 3 _⇔_
 
   -- implication and equivalence can be defined in terms of the more basic
   -- operations

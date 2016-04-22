@@ -95,7 +95,7 @@ private
 
 private
   infixr 5 _=>_
-           
+
   _=>_ : Bool → Bool → Bool
   x => y = not x || y
 

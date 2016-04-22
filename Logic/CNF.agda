@@ -64,14 +64,14 @@ module _ {n} where
   nnf-correct (¬ ff) = ¬⊥=⊤
 
   nnf-correct (¬ (A ∧ B)) = begin
-    ¬ (A ∧ B)                          ≃⟨ deMorgan₁ _ _ ⟩
-    (¬ A ∨ ¬ B)                        ≃⟨ ∨-cong (nnf-correct (¬ A)) (nnf-correct (¬ B)) ⟩
-    (nnfProp (¬ A) ∨ nnfProp (¬ B))    ∎
+    ¬ (A ∧ B)                        ≃⟨ deMorgan₁ _ _ ⟩
+    ¬ A ∨ ¬ B                        ≃⟨ ∨-cong (nnf-correct (¬ A)) (nnf-correct (¬ B)) ⟩
+    nnfProp (¬ A) ∨ nnfProp (¬ B)    ∎
 
   nnf-correct (¬ (A ∨ B)) = begin
-    ¬ (A ∨ B)                          ≃⟨ deMorgan₂ _ _ ⟩
-    (¬ A ∧ ¬ B)                        ≃⟨ ∧-cong (nnf-correct (¬ A)) (nnf-correct (¬ B)) ⟩
-    (nnfProp (¬ A) ∧ nnfProp (¬ B))    ∎
+    ¬ (A ∨ B)                        ≃⟨ deMorgan₂ _ _ ⟩
+    ¬ A ∧ ¬ B                        ≃⟨ ∧-cong (nnf-correct (¬ A)) (nnf-correct (¬ B)) ⟩
+    nnfProp (¬ A) ∧ nnfProp (¬ B)    ∎
 
   -- nnf-idempotent : ∀ A → nnfProp (nnfProp A) ≡ nnfProp A
   -- nnf-idempotent (# v) = ≡refl
@@ -135,7 +135,7 @@ module _ {n} where
     clean-correct (ff ∨ B) = begin
       clean B  ≃⟨ clean-correct B ⟩
             B  ≃⟨ sym $ fst ∨-identity _ ⟩
-      (ff ∨ B) ∎
+      ff ∨  B  ∎
     clean-correct (# v ∨ B) = ∨-cong refl (clean-correct B)
     clean-correct (A ∧ A₁ ∨ B) = ∨-cong (clean-correct (A ∧ A₁)) (clean-correct B)
     clean-correct ((A ∨ A₁) ∨ B) = ∨-cong (clean-correct (A ∨ A₁)) (clean-correct B)

@@ -135,17 +135,17 @@ absorptive = ∨-absorbs-∧ , ∧-absorbs-∨
 ∧-cong : _∧_ Preserves₂ _≃_ ⟶ _≃_ ⟶ _≃_
 ∧-cong {A} {A′} {B} {B′} aa bb =
   begin
-    (A  ∧ B)    ≃⟨ ∧-cong₁ aa ⟩
-    (A′ ∧ B)    ≃⟨ ∧-comm _ _ ⟩
-    (B  ∧ A′)   ≃⟨ ∧-cong₁ bb ⟩
-    (B′ ∧ A′)   ≃⟨ ∧-comm _ _ ⟩
-    (A′ ∧ B′)   ∎
+    A  ∧ B    ≃⟨ ∧-cong₁ aa ⟩
+    A′ ∧ B    ≃⟨ ∧-comm _ _ ⟩
+    B  ∧ A′   ≃⟨ ∧-cong₁ bb ⟩
+    B′ ∧ A′   ≃⟨ ∧-comm _ _ ⟩
+    A′ ∧ B′   ∎
 
 ∨-cong : _∨_ Preserves₂ _≃_ ⟶ _≃_ ⟶ _≃_
 ∨-cong {A}{A′}{B}{B′} aa bb =
   begin
-    (A  ∨ B)    ≃⟨ ∨-cong₁ aa ⟩
-    (A′ ∨ B)    ≃⟨ ∨-comm _ _ ⟩
-    (B  ∨ A′)   ≃⟨ ∨-cong₁ bb ⟩
-    (B′ ∨ A′)   ≃⟨ ∨-comm _ _ ⟩
-    (A′ ∨ B′)   ∎
+    A  ∨ B    ≃⟨ ∨-cong₁ aa ⟩
+    A′ ∨ B    ≃⟨ ∨-comm _ _ ⟩
+    B  ∨ A′   ≃⟨ ∨-cong₁ bb ⟩
+    B′ ∨ A′   ≃⟨ ∨-comm _ _ ⟩
+    A′ ∨ B′   ∎
