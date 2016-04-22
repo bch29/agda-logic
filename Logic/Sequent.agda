@@ -91,7 +91,8 @@ open import Algebra.Properties.BooleanAlgebra (booleanAlgebra n)
 open BooleanAlgebra (booleanAlgebra n) using (∧-assoc; ∨-assoc)
 open CommutativeSemiring (∨-∧-commutativeSemiring) using ()
   renaming ( +-identity to ∨-identity
-           ; *-identity to ∧-identity)
+           ; *-identity to ∧-identity
+           )
 
 private
   ∨-monoid = CommutativeSemiring.+-monoid ∨-∧-commutativeSemiring
@@ -128,6 +129,12 @@ open ⊨.⊨-Reasoning
   ⋀ (A , B , Γ)      ⊨⟨ ==>-sound _ _ seq ⟩
   ⋁ Δ                ∎
 
+==>-sound Γ _ (∨r {_}{Δ}{A}{B} seq) = begin
+  ⋀ Γ                ⊨⟨ ==>-sound _ _ seq ⟩
+  ⋁ (A , B , Δ)      ⊨⟨ ≃left $ ►-∙₂ ∨-monoid _ _ _ _ ⟩
+  ((A ∨ B) ∨ ⋁ Δ)    ⊨⟨ ≃right $ ►-∙ ∨-monoid _ _ _ ⟩
+  ⋁ ((A ∨ B) , Δ)    ∎
+
 ==>-sound Γ _ (∧r {_}{Δ}{A}{B} lseq rseq) = begin
   ⋀ Γ                    ⊨⟨ ≃right $ ∧-idempotent _ ⟩
   ⋀ Γ ∧ ⋀ Γ              ⊨⟨ ⊨.∧-cong (==>-sound _ _ lseq) (==>-sound _ _ rseq) ⟩
@@ -137,18 +144,12 @@ open ⊨.⊨-Reasoning
   ⋁ ((A ∧ B) , Δ)        ∎
 
 ==>-sound _ Δ (∨l {Γ}{_}{A}{B} lseq rseq) = begin
-  ⋀ ((A ∨ B) , Γ)           ⊨⟨ ≃left $ ►-∙ ∧-monoid _ _ _ ⟩
-  (A ∨ B) ∧ ⋀ Γ             ⊨⟨ ≃left $ snd ∧-∨-distrib _ _ _ ⟩
+  ⋀ ((A ∨ B) , Γ)          ⊨⟨ ≃left $ ►-∙ ∧-monoid _ _ _ ⟩
+  (A ∨ B) ∧ ⋀ Γ            ⊨⟨ ≃left $ snd ∧-∨-distrib _ _ _ ⟩
   ((A ∧ ⋀ Γ) ∨ (B ∧ ⋀ Γ))  ⊨⟨ ⊨.∨-cong (≃right $ ►-∙ ∧-monoid _ _ _) (≃right $ ►-∙ ∧-monoid _ _ _) ⟩
   (⋀ (A , Γ) ∨ ⋀ (B , Γ))  ⊨⟨ ⊨.∨-cong (==>-sound _ _ lseq) (==>-sound _ _ rseq) ⟩
   (⋁ Δ ∨ ⋁ Δ)              ⊨⟨ ≃left $ ∨-idempotent _ ⟩
   ⋁ Δ                       ∎
-
-==>-sound Γ _ (∨r {_}{Δ}{A}{B} seq) = begin
-  ⋀ Γ                ⊨⟨ ==>-sound _ _ seq ⟩
-  ⋁ (A , B , Δ)      ⊨⟨ ≃left $ ►-∙₂ ∨-monoid _ _ _ _ ⟩
-  ((A ∨ B) ∨ ⋁ Δ)    ⊨⟨ ≃right $ ►-∙ ∨-monoid _ _ _ ⟩
-  ⋁ ((A ∨ B) , Δ)    ∎
 
 ==>-sound _ Δ (¬l {Γ}{_}{A} sequent) = begin
   ⋀ ((¬ A) , Γ)               ⊨⟨ ≃left $ ►-∙ ∧-monoid _ _ _ ⟩
@@ -171,57 +172,47 @@ open ⊨.⊨-Reasoning
   ⋁ ((¬ A) , Δ)               ∎
 
 ==>-sound _ _ (swapl {Γ}{Δ}{A}{B} seq) = begin
-  ⋀ (B , A , Γ)              ⊨⟨ ≃left $ ►-∙₂ ∧-monoid _ _ _ _ ⟩
-  (B ∧ A) ∧ ⋀ Γ              ⊨⟨ ⊨.∧-cong (⊨.∧-comm _ _) ⊨.refl ⟩
-  (A ∧ B) ∧ ⋀ Γ              ⊨⟨ ≃right $ ►-∙₂ ∧-monoid _ _ _ _ ⟩
-  ⋀ (A , B , Γ)              ⊨⟨ ==>-sound _ _ seq ⟩
-  ⋁ Δ                        ∎
+  ⋀ (B , A , Γ)      ⊨⟨ ≃left $ ►-∙₂ ∧-monoid _ _ _ _ ⟩
+  (B ∧ A) ∧ ⋀ Γ      ⊨⟨ ⊨.∧-cong (⊨.∧-comm _ _) ⊨.refl ⟩
+  (A ∧ B) ∧ ⋀ Γ      ⊨⟨ ≃right $ ►-∙₂ ∧-monoid _ _ _ _ ⟩
+  ⋀ (A , B , Γ)      ⊨⟨ ==>-sound _ _ seq ⟩
+  ⋁ Δ                ∎
 
 ==>-sound _ _ (swapr {Γ}{Δ}{A}{B} seq) = begin
-  ⋀ Γ                       ⊨⟨ ==>-sound _ _ seq ⟩
-  ⋁ (A , B , Δ)             ⊨⟨ ≃left $ ►-∙₂ ∨-monoid _ _ _ _ ⟩
-  ((A ∨ B) ∨ ⋁ Δ)           ⊨⟨ ⊨.∨-cong (⊨.∨-comm _ _) ⊨.refl ⟩
-  ((B ∨ A) ∨ ⋁ Δ)           ⊨⟨ ≃right $ ►-∙₂ ∨-monoid _ _ _ _ ⟩
-  ⋁ (B , A , Δ)             ∎
+  ⋀ Γ                ⊨⟨ ==>-sound _ _ seq ⟩
+  ⋁ (A , B , Δ)      ⊨⟨ ≃left $ ►-∙₂ ∨-monoid _ _ _ _ ⟩
+  ((A ∨ B) ∨ ⋁ Δ)    ⊨⟨ ⊨.∨-cong (⊨.∨-comm _ _) ⊨.refl ⟩
+  ((B ∨ A) ∨ ⋁ Δ)    ⊨⟨ ≃right $ ►-∙₂ ∨-monoid _ _ _ _ ⟩
+  ⋁ (B , A , Δ)      ∎
 
 module Reasoning where
 
-  data TransChain : Env → Env → Env → Env → Set where
-    simpl : ∀ {Γ Δ} → TransChain Γ Δ Γ Δ
-    cons : ∀ {Γ Γ′ Γ′′ Δ Δ′ Δ′′} → (Γ ==> Δ → Γ′ ==> Δ′) → TransChain Γ′ Δ′ Γ′′ Δ′′ → TransChain Γ Δ Γ′′ Δ′′
+  infixr -2 begin>_
+  infixr -2 _=>⟨_⟩_
+  infixr -1 _∎>
 
-  chain : ∀ {Γ Γ′ Δ Δ′} → TransChain Γ Δ Γ′ Δ′ → (Γ ==> Δ → Γ′ ==> Δ′)
-  chain simpl = id
-  chain (cons f c) = chain c ∘ f
+  _∎> : ∀ {a}(A : Set a) → (A → A)
+  _ ∎> = id
 
-  infix -2 begin>_
+  begin>_ : ∀ {Γ Δ A Γ′ Δ′} → (A , Γ ==> A , Δ → Γ′ ==> Δ′) → Γ′ ==> Δ′
+  begin> p = p axiom
 
-  begin>_ : ∀ {Γ Γ′ Δ Δ′ A} → TransChain (A , Γ) (A , Δ) Γ′ Δ′ → Γ′ ==> Δ′
-  begin> chn = chain chn axiom
-
-  infixr -1 _=>_⟨_⟩_
-
-  _=>_⟨_⟩_ : ∀ Γ Δ {Γ′ Γ′′ Δ′ Δ′′} → (Γ ==> Δ → Γ′ ==> Δ′) → TransChain Γ′ Δ′ Γ′′ Δ′′ → TransChain Γ Δ Γ′′ Δ′′
-  (_ => _ ⟨ f ⟩ c) = cons f c
-
-  infix 0 _=>_∎>
-
-  _=>_∎> : ∀ Γ Δ → TransChain Γ Δ Γ Δ
-  _ => _ ∎> = simpl
+  _=>⟨_⟩_ : ∀ {a b c}(A : Set a){B : Set b}{C : Set c} → (A → B) → (B → C) → (A → C)
+  _ =>⟨ f ⟩ g = g ∘ f
 
   example : ∀ {P Q} → ∅ ==> (((P ⇒ Q) ⇒ P) ⇒ P) , ∅
   example {P}{Q} =
     begin>
-      P , ∅             => P , ∅                    ⟨ ⇒l lhs ⟩
-      ---------------------------------------------------------
-      ((P ⇒ Q) ⇒ P) , ∅ => P , ∅                    ⟨ ⇒r ⟩
-      ---------------------------------------------------------
-      ∅                 => (((P ⇒ Q) ⇒ P) ⇒ P) , ∅  ∎>
+      P , ∅             ==> P , ∅                    =>⟨ ⇒l lhs ⟩
+      ------------------------------------------------------------
+      ((P ⇒ Q) ⇒ P) , ∅ ==> P , ∅                    =>⟨ ⇒r ⟩
+      ------------------------------------------------------------
+      ∅                 ==> (((P ⇒ Q) ⇒ P) ⇒ P) , ∅  ∎>
     where
       lhs =
         begin>
-          P , ∅ => P , Q , ∅         ⟨ swapr ⟩
-          -------------------------------------
-          P , ∅ => Q , P , ∅         ⟨ ⇒r ⟩
-          -------------------------------------
-          ∅     => (P ⇒ Q) , P , ∅   ∎>
+          P , ∅ ==> P , Q , ∅         =>⟨ swapr ⟩
+          ----------------------------------------
+          P , ∅ ==> Q , P , ∅         =>⟨ ⇒r ⟩
+          ----------------------------------------
+          ∅     ==> (P ⇒ Q) , P , ∅   ∎>
